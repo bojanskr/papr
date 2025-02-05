@@ -1,4 +1,4 @@
-import { describe, expect, test } from '@jest/globals';
+import { describe, test } from 'node:test';
 import {
   Binary,
   BSONSymbol,
@@ -69,8 +69,6 @@ describe('mongodb types', () => {
   describe('PaprFilter', () => {
     describe('existing top-level keys', () => {
       test('valid types', () => {
-        expect(true).toBeTruthy();
-
         expectType<PaprFilter<TestDocument>>({ _id: new ObjectId() });
 
         expectType<PaprFilter<TestDocument>>({ foo: 'foo' });
@@ -102,15 +100,13 @@ describe('mongodb types', () => {
         expectType<PaprFilter<TestDocument>>({ dbRef: new DBRef('collection', new ObjectId()) });
         expectType<PaprFilter<TestDocument>>({ decimal: new Decimal128('123.45') });
         expectType<PaprFilter<TestDocument>>({ int32: new Int32('123') });
-        expectType<PaprFilter<TestDocument>>({ long: new Long('123', 45) });
+        expectType<PaprFilter<TestDocument>>({ long: new Long(123, 45) });
         expectType<PaprFilter<TestDocument>>({ maxKey: new MaxKey() });
         expectType<PaprFilter<TestDocument>>({ minKey: new MinKey() });
         expectType<PaprFilter<TestDocument>>({ regexp: /foo/ });
       });
 
       test('invalid types', () => {
-        expect(true).toBeTruthy();
-
         // @ts-expect-error Type mismatch
         expectType<PaprFilter<TestDocument>>({ _id: '577fa2d90c4cc47e31cf4b6f' });
 
@@ -275,8 +271,6 @@ describe('mongodb types', () => {
     describe('filter operators', () => {
       describe('logical filter operators', () => {
         test('valid types on existing top-level keys', () => {
-          expect(true).toBeTruthy();
-
           expectType<PaprFilter<TestDocument>>({ _id: { $in: [new ObjectId()] } });
 
           expectType<PaprFilter<TestDocument>>({ foo: { $eq: 'foo' } });
@@ -522,7 +516,7 @@ describe('mongodb types', () => {
             $set: { decimal: new Decimal128('123.45') },
           });
           expectType<PaprUpdateFilter<TestDocument>>({ $set: { int32: new Int32('123') } });
-          expectType<PaprUpdateFilter<TestDocument>>({ $set: { long: new Long('123', 45) } });
+          expectType<PaprUpdateFilter<TestDocument>>({ $set: { long: new Long(123, 45) } });
           expectType<PaprUpdateFilter<TestDocument>>({ $set: { maxKey: new MaxKey() } });
           expectType<PaprUpdateFilter<TestDocument>>({ $set: { minKey: new MinKey() } });
           expectType<PaprUpdateFilter<TestDocument>>({ $set: { regexp: /foo/ } });
