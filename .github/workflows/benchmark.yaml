@@ -8,19 +8,17 @@ jobs:
   benchmark:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4.1.1
+      - uses: actions/checkout@v4.2.1
         with:
           filter: tree:0
-      - uses: pnpm/action-setup@v3.0.0
-        with:
-          version: 8
-      - uses: actions/setup-node@v4.0.1
+      - uses: pnpm/action-setup@v4.0.0
+      - uses: actions/setup-node@v4.0.4
         with:
           node-version-file: 'package.json'
           cache: 'pnpm'
-      - uses: supercharge/mongodb-github-action@v1.10.0
+      - uses: supercharge/mongodb-github-action@1.12.0
         with:
-          mongodb-version: 6.0
+          mongodb-version: 8.0
       - id: date
         run: |
           echo "date=$(date +%Y-%m-%d)" >> $GITHUB_OUTPUT
@@ -33,7 +31,7 @@ jobs:
           script: |
             core.setOutput('results', require('./docs/data.json').benchmark.results);
       - id: create-pr
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v7
         with:
           add-paths: docs/data.json
           base: main

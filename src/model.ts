@@ -57,7 +57,7 @@ export interface Model<TSchema extends BaseSchema, TOptions extends SchemaOption
   ) => Promise<TResult[]>;
 
   bulkWrite: (
-    operations: PaprBulkWriteOperation<TSchema, TOptions>[],
+    operations: readonly PaprBulkWriteOperation<TSchema, TOptions>[],
     options?: BulkWriteOptions
   ) => Promise<BulkWriteResult | void>;
 
@@ -138,15 +138,14 @@ export interface Model<TSchema extends BaseSchema, TOptions extends SchemaOption
   ) => Promise<ProjectionType<TSchema, TProjection>>;
 }
 
-/* eslint-disable @typescript-eslint/ban-types */
 type ModelMethodsNames = NonNullable<
   {
-    [P in keyof Model<BaseSchema, Object>]: Model<BaseSchema, Object>[P] extends Function
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+    [P in keyof Model<BaseSchema, object>]: Model<BaseSchema, object>[P] extends Function
       ? P
       : never;
-  }[keyof Model<BaseSchema, Object>]
+  }[keyof Model<BaseSchema, object>]
 >;
-/* eslint-enable @typescript-eslint/ban-types */
 
 // `upsert` is a custom method, which is not wrapped with hooks.
 export type HookMethodsNames = Exclude<ModelMethodsNames, 'upsert'>;
@@ -376,7 +375,7 @@ export function build<TSchema extends BaseSchema, TOptions extends SchemaOptions
   model.bulkWrite = wrap(
     model,
     async function bulkWrite(
-      operations: PaprBulkWriteOperation<TSchema, TOptions>[],
+      operations: readonly PaprBulkWriteOperation<TSchema, TOptions>[],
       options?: BulkWriteOptions
     ): Promise<BulkWriteResult | void> {
       if (operations.length === 0) {
@@ -584,7 +583,7 @@ export function build<TSchema extends BaseSchema, TOptions extends SchemaOptions
     // key, `_id` (which will override the earlier exclusion).
     //
     // @ts-expect-error Ignore `string` type mismatched to `keyof TSchema`
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+
     const key: keyof TSchema = Object.keys(filter)[0] || '_id';
 
     const result = await model.findOne(filter, {

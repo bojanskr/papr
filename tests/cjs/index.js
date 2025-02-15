@@ -1,6 +1,3 @@
-// This test does not use Jest because we want to test
-// that the output of the build process works under native Node.js ESM syntax
-// At this moment Jest does not support ESM syntax without transpiling
 const assert = require('assert');
 const { MongoClient, ObjectId } = require('mongodb');
 const { MongoMemoryServer } = require('mongodb-memory-server');
@@ -20,7 +17,7 @@ async function setup() {
 
   const uri = mongoServer.getUri();
 
-  console.log(`Testing with ${uri}${DB}`);
+  console.log(`Testing with MongoDB v${process.env.MONGOMS_VERSION} on ${uri}${DB}`);
 
   connection = await MongoClient.connect(uri);
   const db = connection.db(DB);
